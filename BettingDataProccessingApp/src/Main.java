@@ -1,9 +1,25 @@
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class Main {
+
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
+    
     public static void main(String[] args) throws IOException {
+
+        try {
+            FileHandler fileHandler = new FileHandler("error.log");
+            SimpleFormatter simpleFormatter = new SimpleFormatter();
+            fileHandler.setFormatter(simpleFormatter);
+            logger.addHandler(fileHandler);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         List<MatchData> matchDataList = new ArrayList<>();
         List<PlayerData> playerDataList = new ArrayList<>();
@@ -49,7 +65,7 @@ public class Main {
         }
         mdf.close();
 
-        int casinoBalance = 0;
+        double casinoBalance = 0;
 
         for (String id : playerIds) {
             try {
@@ -57,10 +73,10 @@ public class Main {
                         .filter(e -> e.getPlayerID().equals(id))
                         .toList();
 
-                int coinBalance = 0;
-                int playerResult = 0;
-                int wonGames = 0;
-                int allGames = 0;
+                double coinBalance = 0;
+                double playerResult = 0;
+                double wonGames = 0;
+                double allGames = 0;
 
 
                 for (PlayerData action : playerActions) {
@@ -79,6 +95,7 @@ public class Main {
                                 throw new RuntimeException("Bet too high! Coin balance: " + coinBalance);
                             }
 
+                            //MatchData matchData;
                             MatchData matchData;
                             try {
                                 matchData = matchDataList.stream()
@@ -88,8 +105,10 @@ public class Main {
 
                             } catch (Exception e) {
                                 illegalPlayers.add(action);
+                                //logger.severe("Match ID not found");
                                 throw new RuntimeException("Match ID not found");
                             }
+
                             allGames++;
 
                             if (matchData.getMatchResult().equals(action.getBetSide())) {
@@ -99,54 +118,59 @@ public class Main {
                                 } else if (matchData.getMatchResult().equals("B")) {
                                     playerResult += action.getCoinNumber() * matchData.getReturnRateB();
                                 } else {
-                                    throw new RuntimeException("Invalid return rate");
+                                    logger.severe("Invalid return rate");
+                                    //throw new RuntimeException("Invalid return rate");
                                 }
                             } else if (!matchData.getMatchResult().equals("DRAW") &&
                                     !matchData.getMatchResult().equals(action.getBetSide())) {
                                 playerResult -= action.getCoinNumber();
                             }
                         }
-                        default -> throw new RuntimeException("An error occured");
+                        default -> logger.severe("Wrong type of operation");
+                        //throw new RuntimeException("An error occured");
                     }
                 }
                 coinBalance += playerResult;
-                casinoBalance += playerResult;
+                casinoBalance -= playerResult;
                 legalPlayers.add(new LegalPlayer(id, coinBalance, wonGames / allGames));
 
             } catch (RuntimeException e) {
-                System.out.println("Error: " + e.getMessage());
+                logger.severe("Error: " + e.getMessage());
+                //System.out.println("Error: " + e.getMessage());
             }
         }
 
 
         // OUTPUT FILE
 
-        legalPlayers.sort(Comparator.comparing(LegalPlayer::getLegalPlayerID));
+        //legalPlayers.sort(Comparator.comparing(LegalPlayer::getLegalPlayerID));
 
         PrintWriter printWriter = new PrintWriter(new FileWriter("result.txt"));
+
         for (LegalPlayer player : legalPlayers) {
             printWriter.print(player.getLegalPlayerID());
             printWriter.print(" ");
-            printWriter.print(player.getFinalBalance());
+            printWriter.print((int)player.getFinalBalance());
             printWriter.print(" ");
-            printWriter.print(player.getWinRate());
+            printWriter.printf("%.2f", player.getWinRate());
             printWriter.println();
-        }
 
+        }
+        printWriter.println();
         for (PlayerData l : illegalPlayers) {
             printWriter.print(l.getPlayerID());
             printWriter.print(" ");
             printWriter.print(l.getPlayerOperation());
             printWriter.print(" ");
-            printWriter.print(l.getMatchID());
+            printWriter.print(l.getMatchID().isEmpty() ? null : "");
             printWriter.print(" ");
             printWriter.print(l.getCoinNumber());
             printWriter.print(" ");
-            printWriter.print(l.getBetSide());
+            printWriter.print(l.getBetSide().isEmpty() ? null : "");
             printWriter.println(" ");
         }
         printWriter.println();
-        printWriter.print(casinoBalance);
+        printWriter.print((int)casinoBalance);
 
         printWriter.close();
     }
