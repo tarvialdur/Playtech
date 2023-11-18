@@ -8,7 +8,7 @@ import java.util.logging.SimpleFormatter;
 public class Main {
 
     private static final Logger logger = Logger.getLogger(Main.class.getName());
-    
+
     public static void main(String[] args) throws IOException {
 
         try {
@@ -23,11 +23,12 @@ public class Main {
 
         List<MatchData> matchDataList = new ArrayList<>();
         List<PlayerData> playerDataList = new ArrayList<>();
-        Set<String> playerIds = new TreeSet<>();
         List<PlayerData> illegalPlayers = new ArrayList<>();
         List<LegalPlayer> legalPlayers = new ArrayList<>();
+        Set<String> playerIds = new TreeSet<>();
 
-        // Loen faili ja lisan info listi...
+
+        // pdf - Player Data File
 
         BufferedReader pdf = new BufferedReader(new FileReader("player_data.txt"));  // pdf - PlayerDataFile
         String pdfLine = pdf.readLine();
@@ -47,9 +48,9 @@ public class Main {
         }
         pdf.close();
 
-        // Loen faili ja lisan info listi...
+        // mdf - Match Data File
 
-        BufferedReader mdf = new BufferedReader(new FileReader("match_data.txt"));    // mdf - Match Data File
+        BufferedReader mdf = new BufferedReader(new FileReader("match_data.txt"));
         String mdfLine = mdf.readLine();
 
         while (mdfLine != null) {
@@ -95,7 +96,6 @@ public class Main {
                                 throw new RuntimeException("Bet too high! Coin balance: " + coinBalance);
                             }
 
-                            //MatchData matchData;
                             MatchData matchData;
                             try {
                                 matchData = matchDataList.stream()
@@ -118,8 +118,8 @@ public class Main {
                                 } else if (matchData.getMatchResult().equals("B")) {
                                     playerResult += action.getCoinNumber() * matchData.getReturnRateB();
                                 } else {
-                                    logger.severe("Invalid return rate");
-                                    //throw new RuntimeException("Invalid return rate");
+                                    //logger.severe("Invalid return rate");
+                                    throw new RuntimeException("Invalid return rate");
                                 }
                             } else if (!matchData.getMatchResult().equals("DRAW") &&
                                     !matchData.getMatchResult().equals(action.getBetSide())) {
@@ -141,16 +141,13 @@ public class Main {
         }
 
 
-        // OUTPUT FILE
-
-        //legalPlayers.sort(Comparator.comparing(LegalPlayer::getLegalPlayerID));
-
         PrintWriter printWriter = new PrintWriter(new FileWriter("result.txt"));
+        legalPlayers.sort(Comparator.comparing(LegalPlayer::getLegalPlayerID));
 
         for (LegalPlayer player : legalPlayers) {
             printWriter.print(player.getLegalPlayerID());
             printWriter.print(" ");
-            printWriter.print((int)player.getFinalBalance());
+            printWriter.print((int) player.getFinalBalance());
             printWriter.print(" ");
             printWriter.printf("%.2f", player.getWinRate());
             printWriter.println();
@@ -170,7 +167,7 @@ public class Main {
             printWriter.println(" ");
         }
         printWriter.println();
-        printWriter.print((int)casinoBalance);
+        printWriter.print((int) casinoBalance);
 
         printWriter.close();
     }
