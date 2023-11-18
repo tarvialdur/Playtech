@@ -1,25 +1,9 @@
-
 import java.io.*;
 import java.util.*;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class Main {
 
-    private static final Logger logger = Logger.getLogger(Main.class.getName());
-
     public static void main(String[] args) throws IOException {
-
-        try {
-            FileHandler fileHandler = new FileHandler("error.log");
-            SimpleFormatter simpleFormatter = new SimpleFormatter();
-            fileHandler.setFormatter(simpleFormatter);
-            logger.addHandler(fileHandler);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
         List<MatchData> matchDataList = new ArrayList<>();
         List<PlayerData> playerDataList = new ArrayList<>();
@@ -27,9 +11,7 @@ public class Main {
         List<LegalPlayer> legalPlayers = new ArrayList<>();
         Set<String> playerIds = new TreeSet<>();
 
-
         // pdf - Player Data File
-
         BufferedReader pdf = new BufferedReader(new FileReader("player_data.txt"));  // pdf - PlayerDataFile
         String pdfLine = pdf.readLine();
 
@@ -39,7 +21,7 @@ public class Main {
             String playerOperation = spot[1];
             String matchID = spot[2];
             int coinNumber = Integer.parseInt(spot[3]);
-            String betSide = spot[2].isEmpty() ? "" : spot[4]; // if spot[2] in the line is empty, then spot[4] will be also marked as empty.
+            String betSide = spot[2].isEmpty() ? "" : spot[4]; // if spot[2] in the line is empty, then spot[4] will be also empty.
 
             PlayerData playerData = new PlayerData(playerID, playerOperation, matchID, coinNumber, betSide);
             playerDataList.add(playerData);
@@ -49,7 +31,6 @@ public class Main {
         pdf.close();
 
         // mdf - Match Data File
-
         BufferedReader mdf = new BufferedReader(new FileReader("match_data.txt"));
         String mdfLine = mdf.readLine();
 
@@ -66,7 +47,7 @@ public class Main {
         }
         mdf.close();
 
-        double casinoBalance = 0;
+        int casinoBalance = 0;
 
         for (String id : playerIds) {
             try {
@@ -105,7 +86,6 @@ public class Main {
 
                             } catch (Exception e) {
                                 illegalPlayers.add(action);
-                                //logger.severe("Match ID not found");
                                 throw new RuntimeException("Match ID not found");
                             }
 
@@ -118,7 +98,6 @@ public class Main {
                                 } else if (matchData.getMatchResult().equals("B")) {
                                     playerResult += action.getCoinNumber() * matchData.getReturnRateB();
                                 } else {
-                                    //logger.severe("Invalid return rate");
                                     throw new RuntimeException("Invalid return rate");
                                 }
                             } else if (!matchData.getMatchResult().equals("DRAW") &&
@@ -126,17 +105,16 @@ public class Main {
                                 playerResult -= action.getCoinNumber();
                             }
                         }
-                        default -> logger.severe("Wrong type of operation");
-                        //throw new RuntimeException("An error occured");
+                        default -> throw new RuntimeException("An error occurred");
                     }
                 }
+
                 coinBalance += playerResult;
                 casinoBalance -= playerResult;
                 legalPlayers.add(new LegalPlayer(id, coinBalance, wonGames / allGames));
 
             } catch (RuntimeException e) {
-                logger.severe("Error: " + e.getMessage());
-                //System.out.println("Error: " + e.getMessage());
+                System.out.println("Error: " + e.getMessage());
             }
         }
 
@@ -151,9 +129,9 @@ public class Main {
             printWriter.print(" ");
             printWriter.printf("%.2f", player.getWinRate());
             printWriter.println();
-
         }
         printWriter.println();
+
         for (PlayerData l : illegalPlayers) {
             printWriter.print(l.getPlayerID());
             printWriter.print(" ");
@@ -167,7 +145,7 @@ public class Main {
             printWriter.println(" ");
         }
         printWriter.println();
-        printWriter.print((int) casinoBalance);
+        printWriter.print(casinoBalance);
 
         printWriter.close();
     }

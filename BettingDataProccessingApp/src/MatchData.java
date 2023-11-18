@@ -14,16 +14,15 @@ public class MatchData {
     public String getMatchID() {
         return matchID;
     }
-
     public double getReturnRateA() {
         return returnRateA;
     }
-
     public double getReturnRateB() {
         return returnRateB;
     }
-
     public String getMatchResult() {
         return matchResult;
     }
 }
+
+
