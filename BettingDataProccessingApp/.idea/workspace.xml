@@ -2,20 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd67e861-5dd0-46f6-91de-6582c4ae0973" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/untitled104/IllegalPlayer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/untitled104/LegalPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/untitled104/LegalPlayer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/untitled104/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/untitled104/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/untitled104/Match.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/untitled104/Player.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/untitled104/Winternship task.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/untitled104/resources/match_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/untitled104/resources/player_data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/untitled104/resources/result.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/player_data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/player_data.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result.txt" beforeDir="false" afterPath="$PROJECT_DIR$/result.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IllegalPlayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LegalPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LegalPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Match.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MatchData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PlayerData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Winternship task.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Winternship task.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PlayerData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PlayerData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +40,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2Y8ZgtRZmxWtm4BWOK8qCSWm0cQ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
@@ -104,10 +102,11 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
@@ -157,5 +156,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
