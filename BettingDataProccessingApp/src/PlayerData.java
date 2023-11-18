@@ -7,9 +7,6 @@ public class PlayerData {
     private String betSide;
 
     public PlayerData(String playerID, String playerOperation, String matchID, int coinNumber, String betSide) {
-        if (!playerOperation.equals("BET")){
-          // throw new RuntimeException("Wrong type of operation");
-        }
         this.playerID = playerID;
         this.playerOperation = playerOperation;
         this.matchID = matchID;

@@ -11,8 +11,6 @@ public class Main {
         List<PlayerData> illegalPlayers = new ArrayList<>();
         List<LegalPlayer> legalPlayers = new ArrayList<>();
 
-        double casinoBalance = 0;
-
         // Loen faili ja lisan info listi...
 
         BufferedReader pdf = new BufferedReader(new FileReader("player_data.txt"));  // pdf - PlayerDataFile
@@ -33,10 +31,7 @@ public class Main {
         }
         pdf.close();
 
-
         // Loen faili ja lisan info listi...
-
-
 
         BufferedReader mdf = new BufferedReader(new FileReader("match_data.txt"));    // mdf - Match Data File
         String mdfLine = mdf.readLine();
@@ -54,79 +49,79 @@ public class Main {
         }
         mdf.close();
 
+        int casinoBalance = 0;
 
-        for(String id: playerIds){
-            try{
+        for (String id : playerIds) {
+            try {
                 List<PlayerData> playerActions = playerDataList.stream()
                         .filter(e -> e.getPlayerID().equals(id))
                         .toList();
 
-                double coinBalance = 0;
-                double playerResult = 0;
-                double wonGames = 0;
-                double allGames = 0;
+                int coinBalance = 0;
+                int playerResult = 0;
+                int wonGames = 0;
+                int allGames = 0;
 
-                for(PlayerData action: playerActions){
-                    switch(action.getPlayerOperation()){
+
+                for (PlayerData action : playerActions) {
+                    switch (action.getPlayerOperation()) {
                         case "DEPOSIT" -> coinBalance += action.getCoinNumber();
                         case "WITHDRAW" -> {
                             coinBalance -= action.getCoinNumber();
-                            if(coinBalance < 0 ){
+                            if (coinBalance < 0) {
                                 illegalPlayers.add(action);
                                 throw new RuntimeException("Trying to withdraw more than current balance");
                             }
                         }
                         case "BET" -> {
-                            if(action.getCoinNumber() > coinBalance){
+                            if (action.getCoinNumber() > coinBalance) {
                                 illegalPlayers.add(action);
-                                throw new RuntimeException("Bet too high! Coin balance: " + coinBalance);  // ise
+                                throw new RuntimeException("Bet too high! Coin balance: " + coinBalance);
                             }
 
                             MatchData matchData;
-                            try{
+                            try {
                                 matchData = matchDataList.stream()
                                         .filter(e -> e.getMatchID().equals(action.getMatchID()))
                                         .findFirst()
                                         .get();
 
-                            }catch(Exception e ){
+                            } catch (Exception e) {
                                 illegalPlayers.add(action);
                                 throw new RuntimeException("Match ID not found");
                             }
                             allGames++;
 
-                            if(matchData.getMatchResult().equals(action.getBetSide())){
+                            if (matchData.getMatchResult().equals(action.getBetSide())) {
                                 wonGames++;
-                                if(matchData.getMatchResult().equals("A")){
+                                if (matchData.getMatchResult().equals("A")) {
                                     playerResult += action.getCoinNumber() * matchData.getReturnRateA();
-                                }else if(matchData.getMatchResult().equals("B")){
+                                } else if (matchData.getMatchResult().equals("B")) {
                                     playerResult += action.getCoinNumber() * matchData.getReturnRateB();
-                                }else{
+                                } else {
                                     throw new RuntimeException("Invalid return rate");
                                 }
-                            }else if(!matchData.getMatchResult().equals("DRAW") &&
-                                    !matchData.getMatchResult().equals(action.getBetSide())){
+                            } else if (!matchData.getMatchResult().equals("DRAW") &&
+                                    !matchData.getMatchResult().equals(action.getBetSide())) {
                                 playerResult -= action.getCoinNumber();
                             }
                         }
-
-
-                        default -> System.out.println("Oops, seems that an error is present");
+                        default -> throw new RuntimeException("An error occured");
                     }
                 }
                 coinBalance += playerResult;
                 casinoBalance += playerResult;
-                legalPlayers.add(new LegalPlayer(id, coinBalance, wonGames/allGames));
+                legalPlayers.add(new LegalPlayer(id, coinBalance, wonGames / allGames));
 
-            }catch(RuntimeException e){
+            } catch (RuntimeException e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
 
 
-
-
         // OUTPUT FILE
+
+        legalPlayers.sort(Comparator.comparing(LegalPlayer::getLegalPlayerID));
 
         PrintWriter printWriter = new PrintWriter(new FileWriter("result.txt"));
         for (LegalPlayer player : legalPlayers) {

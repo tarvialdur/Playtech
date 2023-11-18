@@ -16,7 +16,7 @@ public class LegalPlayer {
     }
 
     public double getFinalBalance() {
-        return finalBalance;
+        return Math.floor(finalBalance);
     }
 
     public BigDecimal getWinRate() {
