@@ -14,14 +14,6 @@ public class PlayerData {
         this.betSide = betSide;
     }
 
-//    public PlayerData(String playerID, String playerOperation, int coinNumber) {
-//
-//        this.playerID = playerID;
-//        this.playerOperation = playerOperation;
-//        this.coinNumber = coinNumber;
-//    }
-
-
     public String getPlayerID() {
         return playerID;
     }
